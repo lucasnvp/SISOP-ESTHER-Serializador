@@ -52,7 +52,7 @@ Mkfile.old
 dkms.conf
 
 # Metadata
-.metadad
+.metadata
 
 #Eclipse
 RemoteSystemsTempFiles
