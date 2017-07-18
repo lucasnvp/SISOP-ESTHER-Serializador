@@ -18,6 +18,7 @@
 #include "serializador/serializador.h"
 #include "pcb/pcb.h"
 
+/*
 static const char* PROGRAMA = "begin\n"
 		"variables a, b\n"
 		"a = 3\n"
@@ -25,8 +26,9 @@ static const char* PROGRAMA = "begin\n"
 		"a = b + 12\n"
 		"end\n"
 		"\n";
+*/
 
- /*static const char* PROGRAMA = "begin\n"
+static const char* PROGRAMA = "begin\n"
  "variables f, i, t\n"
 
  "#`i`: Iterador\n"
@@ -48,7 +50,8 @@ static const char* PROGRAMA = "begin\n"
  "jnz t inicio\n"
 
  "end\n"
- "\n";*/
+ "\n";
+
 /*
 static const char* PROGRAMA =
 	"#!/usr/bin/ansisop\n"
