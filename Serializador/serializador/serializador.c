@@ -1,5 +1,17 @@
 #include "serializador.h"
 
+t_stream* stream_create(int size) {
+	t_stream* stream = malloc(sizeof(t_stream));
+	stream->size = size;
+	stream->data = malloc(size);
+	return stream;
+}
+
+void stream_destroy(t_stream* stream) {
+	free(stream->data);
+	free(stream);
+}
+
 void serializar_int(uint32_t socket, uint32_t number){
 	send_data(socket, &number, sizeof(uint32_t));
 }
@@ -194,4 +206,110 @@ void deserializar_pcb(int servidor, PCB_t* PCB){
 	offset += size_to_recive;
 
 	free(buffer);
+}
+
+void serializar_variable_t(int client, VARIABLE_T* VARIABLE){
+	uint32_t datos_size = sizeof(VARIABLE_T);
+	void* ENVIAR = malloc(datos_size);
+	uint32_t offset = 0;
+	uint32_t size_to_send;
+
+	size_to_send = sizeof(char);
+	memcpy(ENVIAR + offset, &VARIABLE->id,size_to_send);
+	offset += size_to_send;
+
+	size_to_send = sizeof(VARIABLE->pagina);
+	memcpy(ENVIAR + offset, &(VARIABLE->pagina),size_to_send);
+	offset += size_to_send;
+
+	size_to_send = sizeof(VARIABLE->offset);
+	memcpy(ENVIAR + offset, &(VARIABLE->offset),size_to_send);
+	offset += size_to_send;
+
+	size_to_send = sizeof(VARIABLE->size);
+	memcpy(ENVIAR + offset, &(VARIABLE->size),size_to_send);
+	offset += size_to_send;
+
+	send_data(client, ENVIAR, offset);
+	free(ENVIAR);
+}
+
+t_stream* variable_t_serialize(VARIABLE_T* VARIABLE){
+	uint32_t datos_size = sizeof(VARIABLE_T);
+	t_stream* ENVIAR = stream_create(sizeof(VARIABLE_T));
+	uint32_t offset = 0;
+	uint32_t size_to_send;
+
+	size_to_send = sizeof(char);
+	memcpy(ENVIAR->data + offset, &VARIABLE->id,size_to_send);
+	offset += size_to_send;
+
+	size_to_send = sizeof(VARIABLE->pagina);
+	memcpy(ENVIAR->data + offset, &(VARIABLE->pagina),size_to_send);
+	offset += size_to_send;
+
+	size_to_send = sizeof(VARIABLE->offset);
+	memcpy(ENVIAR->data + offset, &(VARIABLE->offset),size_to_send);
+	offset += size_to_send;
+
+	size_to_send = sizeof(VARIABLE->size);
+	memcpy(ENVIAR->data + offset, &(VARIABLE->size),size_to_send);
+	offset += size_to_send;
+
+	return ENVIAR;
+}
+
+VARIABLE_T* deserializar_variable_t(int servidor){
+	VARIABLE_T* variable = malloc(sizeof(VARIABLE_T));
+	uint32_t buffer_size = sizeof(VARIABLE_T);
+	void* buffer = malloc(buffer_size);
+	uint32_t offset = 0;
+	uint32_t size_to_recive;
+
+	recive_data(servidor, buffer, buffer_size);
+
+	size_to_recive = sizeof(char);
+	memcpy(&variable->id, buffer + offset, sizeof(variable->id));
+	offset += size_to_recive;
+
+	size_to_recive = sizeof(variable->pagina);
+	memcpy(&variable->pagina, buffer + offset, sizeof(variable->pagina));
+	offset += size_to_recive;
+
+	size_to_recive = sizeof(variable->offset);
+	memcpy(&variable->offset, buffer + offset, sizeof(variable->offset));
+	offset += size_to_recive;
+
+	size_to_recive = sizeof(variable->size);
+	memcpy(&variable->size, buffer + offset, sizeof(variable->size));
+	offset += size_to_recive;
+
+	free(buffer);
+	return variable;
+}
+
+VARIABLE_T* variable_t_deserialize(char* stream, int* size){
+	VARIABLE_T* variable = malloc(sizeof(VARIABLE_T));
+	uint32_t offset = 0;
+	uint32_t size_to_recive;
+
+	size_to_recive = sizeof(char);
+	memcpy(&variable->id, stream + offset, sizeof(variable->id));
+	offset += size_to_recive;
+
+	size_to_recive = sizeof(variable->pagina);
+	memcpy(&variable->pagina, stream + offset, sizeof(variable->pagina));
+	offset += size_to_recive;
+
+	size_to_recive = sizeof(variable->offset);
+	memcpy(&variable->offset, stream + offset, sizeof(variable->offset));
+	offset += size_to_recive;
+
+	size_to_recive = sizeof(variable->size);
+	memcpy(&variable->size, stream + offset, sizeof(variable->size));
+	offset += size_to_recive;
+
+	*size = offset;
+
+	return variable;
 }

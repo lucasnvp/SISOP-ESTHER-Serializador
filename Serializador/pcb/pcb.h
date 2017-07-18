@@ -11,7 +11,7 @@ typedef struct PCBType{
 	uint32_t ProgramCounter;
 	uint32_t PageCode;
 	t_metadata_program * CodeTagsPointer;
-	t_queue* StackPointer;
+	t_list* StackPointer;
 	int32_t ExitCode;
 } PCB_t;
 
@@ -23,14 +23,14 @@ typedef struct VARIABLE_T{
 } VARIABLE_T;
 
 typedef struct STACKPOINTER_T{
-	t_queue* Argumentos;
-	t_queue* Variables;
+	t_list* Argumentos;
+	t_list* Variables;
 	uint32_t DireccionDeRetorno;
 	VARIABLE_T * VariableDeRetorno;
 } STACKPOINTER_T;
 
 int i;
-int sizePila;
+int sizeStack;
 
 PCB_t* PCB_new_pointer(uint32_t PID, uint32_t PageCode, t_metadata_program * CodePointer);
 STACKPOINTER_T* stack_new(t_queue* Argumentos, t_queue* Variables, uint32_t DireccionDeRetorno, VARIABLE_T * VariableDeRetorno);
