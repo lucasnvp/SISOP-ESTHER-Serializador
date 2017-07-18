@@ -28,6 +28,7 @@ static const char* PROGRAMA = "begin\n"
 		"\n";
 */
 
+/*
 static const char* PROGRAMA = "begin\n"
  "variables f, i, t\n"
 
@@ -51,8 +52,8 @@ static const char* PROGRAMA = "begin\n"
 
  "end\n"
  "\n";
+*/
 
-/*
 static const char* PROGRAMA =
 	"#!/usr/bin/ansisop\n"
 
@@ -100,7 +101,7 @@ static const char* PROGRAMA =
 	"	*$0 = 1 + *$0\n"
 	"end\n"
 	"\n";
-*/
+
 
 int main(void) {
 	puts("Bidireccionalidad Cliente"); /* prints Bidireccionalidad Cliente */
@@ -154,6 +155,14 @@ int main(void) {
 			//Creo un PCB
 			PCB_t* PCB = PCB_new_pointer(1, 4, metadata);
 
+			//Agrego una linea de stack
+			VARIABLE_T * variableA = variable_new('a',0,0,4);
+			VARIABLE_T * variableG = variable_new('g',0,4,4);
+			STACKPOINTER_T * lineSP = stack_new(0,0,NULL,variableA);
+			list_add(PCB->StackPointer, lineSP);
+			STACKPOINTER_T * lineSP2 = stack_new(0,0,3,variableG);
+			list_add(PCB->StackPointer, lineSP2);
+
 			//Muestro el PCB
 			print_PCB(PCB);
 
@@ -172,6 +181,19 @@ int main(void) {
 
 			serializar_int(server, 4);
 			serializar_variable_t(server, unaVariable);
+			break;
+		}
+
+		case 5: {
+			printf("Serializar un stack\n");
+			VARIABLE_T * variableA = variable_new('a',0,0,4);
+			VARIABLE_T * variableG = variable_new('g',0,4,4);
+			STACKPOINTER_T * lineSP = stack_new(0,0,5,variableA);
+
+			print_LineStack(lineSP);
+
+			serializar_int(server, 5);
+			serializar_stackpointer(server, lineSP);
 			break;
 		}
 

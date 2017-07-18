@@ -117,6 +117,13 @@ void connection_handler(uint32_t socket, uint32_t command) {
 		break;
 	}
 
+	case 5: {
+		printf("Deserializar una lina de stack\n");
+		STACKPOINTER_T* lineSP = deserializar_stackpointer(socket);
+		print_LineStack(lineSP);
+		break;
+	}
+
 	default: /* Optional */
 		printf("Error en el comando\n");
 	}
