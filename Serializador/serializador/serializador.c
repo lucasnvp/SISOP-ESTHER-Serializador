@@ -198,7 +198,7 @@ void deserializar_pcb(int servidor, PCB_t* PCB){
 
 	//StackPointer
 	size_to_recive = sizeof(PCB->StackPointer);
-	memcpy(&PCB->StackPointer, buffer + offset, sizeof(PCB->StackPointer));
+//	memcpy(&PCB->StackPointer, buffer + offset, sizeof(PCB->StackPointer));
 	offset += size_to_recive;
 
 	size_to_recive = sizeof(PCB->ExitCode);
