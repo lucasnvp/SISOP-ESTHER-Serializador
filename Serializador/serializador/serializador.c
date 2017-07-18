@@ -61,7 +61,7 @@ void serializar_pcb(int client, PCB_t* PCB){
 	uint32_t datos_size = 	sizeof(PCB_t) +
 							sizeof(t_metadata_program) +
 							sizeof(t_intructions) * PCB->CodeTagsPointer->instrucciones_size +
-							PCB->CodeTagsPointer->etiquetas_size;
+							strlen(PCB->CodeTagsPointer->etiquetas);
 	void* ENVIAR = malloc(datos_size);
 	uint32_t offset = 0;
 	uint32_t size_to_send;
@@ -103,7 +103,7 @@ void serializar_pcb(int client, PCB_t* PCB){
 		memcpy(ENVIAR + offset, &(PCB->CodeTagsPointer->etiquetas_size), size_to_send);
 		offset += size_to_send;
 		//Etiquetas
-		size_to_send = PCB->CodeTagsPointer->etiquetas_size;
+		size_to_send = strlen(PCB->CodeTagsPointer->etiquetas) + 1;
 		memcpy(ENVIAR + offset, PCB->CodeTagsPointer->etiquetas, size_to_send);
 		offset += size_to_send;
 		//Cantidad de funciones
@@ -180,11 +180,9 @@ void deserializar_pcb(int servidor, PCB_t* PCB){
 		offset += size_to_recive;
 
 		//Etiquetas
-		size_to_recive = PCB->CodeTagsPointer->etiquetas_size;
-		PCB->CodeTagsPointer->etiquetas = (char*) malloc(sizeof(char) * PCB->CodeTagsPointer->etiquetas_size);
-		PCB->CodeTagsPointer->etiquetas = '\0';
-		memcpy(&PCB->CodeTagsPointer->etiquetas, buffer + offset, size_to_recive);
-		offset += size_to_recive;
+//		size_to_recive = PCB->CodeTagsPointer->etiquetas_size;
+		PCB->CodeTagsPointer->etiquetas = strdup(buffer + offset);
+		offset += strlen(PCB->CodeTagsPointer->etiquetas) + 1;
 
 		//Cantidad de funciones
 		size_to_recive = sizeof(PCB->CodeTagsPointer->cantidad_de_funciones);
@@ -236,7 +234,7 @@ void serializar_variable_t(int client, VARIABLE_T* VARIABLE){
 
 t_stream* variable_t_serialize(VARIABLE_T* VARIABLE){
 	uint32_t datos_size = sizeof(VARIABLE_T);
-	t_stream* ENVIAR = stream_create(sizeof(VARIABLE_T));
+	t_stream* ENVIAR = stream_create(datos_size);
 	uint32_t offset = 0;
 	uint32_t size_to_send;
 
