@@ -22,7 +22,7 @@ typedef struct {
 	int size;
 } t_stream;
 
-int i;
+int i, j;
 
 t_stream* stream_create(int size);
 void stream_destroy(t_stream* stream);
