@@ -418,15 +418,43 @@ void serializar_stackpointer(int client, STACKPOINTER_T* lineStack){
 	uint32_t offset = 0;
 	uint32_t size_to_send;
 
-	uint32_t count_line_argumentos = 0;
+	void serialize_element_variables(void* element){
+		VARIABLE_T* var = element;
+		t_stream* stream_var = variable_t_serialize(var);
+		ENVIAR->data = realloc(ENVIAR->data, ENVIAR->size + stream_var->size);
+		memcpy(ENVIAR->data + offset, stream_var->data, stream_var->size);
+		ENVIAR->size += stream_var->size;
+		offset += stream_var->size;
+		stream_destroy(stream_var);
+	}
+
+	uint32_t count_line_argumentos;
+	if(lineStack->Argumentos != NULL){
+		count_line_argumentos = list_size(lineStack->Argumentos);
+	} else{
+		count_line_argumentos = 0;
+	}
 	size_to_send = sizeof(count_line_argumentos);
 	memcpy(ENVIAR->data + offset, &(count_line_argumentos),size_to_send);
 	offset += size_to_send;
 
-	uint32_t count_line_variables = 0;
+	if(lineStack->Argumentos != NULL){
+		list_iterate(lineStack->Argumentos, serialize_element_variables);
+	}
+
+	uint32_t count_line_variables;
+	if(lineStack->Variables != NULL){
+		count_line_variables = list_size(lineStack->Variables);
+	} else{
+		count_line_variables = 0;
+	}
 	size_to_send = sizeof(count_line_variables);
 	memcpy(ENVIAR->data + offset, &(count_line_variables),size_to_send);
 	offset += size_to_send;
+
+	if(lineStack->Variables != NULL){
+		list_iterate(lineStack->Variables, serialize_element_variables);
+	}
 
 	size_to_send = sizeof(lineStack->DireccionDeRetorno);
 	memcpy(ENVIAR->data + offset, &(lineStack->DireccionDeRetorno),size_to_send);
@@ -472,11 +500,23 @@ STACKPOINTER_T* deserializar_stackpointer(int servidor){
 	offset += size_to_recive;
 	lineStack->Argumentos = list_create();
 
+	for(i = 0; i < count_line_argumentos; ++i){
+		VARIABLE_T* varStack = variable_t_deserialize(buffer + offset, &tmp_size);
+		offset += tmp_size;
+		list_add(lineStack->Argumentos, varStack);
+	}
+
 	uint32_t count_line_variables = 0;
 	size_to_recive = sizeof(count_line_variables);
 	memcpy(&count_line_variables, buffer + offset, size_to_recive);
 	offset += size_to_recive;
 	lineStack->Variables = list_create();
+
+	for(i = 0; i < count_line_variables; ++i){
+		VARIABLE_T* varStack = variable_t_deserialize(buffer + offset, &tmp_size);
+		offset += tmp_size;
+		list_add(lineStack->Variables, varStack);
+	}
 
 	size_to_recive = sizeof(lineStack->DireccionDeRetorno);
 	memcpy(&lineStack->DireccionDeRetorno, buffer + offset, size_to_recive);
