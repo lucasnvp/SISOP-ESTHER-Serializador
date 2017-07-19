@@ -158,7 +158,7 @@ int main(void) {
 			//Agrego una linea de stack
 			VARIABLE_T * variableA = variable_new('a',0,0,4);
 			VARIABLE_T * variableG = variable_new('g',0,4,4);
-			STACKPOINTER_T * lineSP = stack_new(0,0,NULL,variableA);
+			STACKPOINTER_T * lineSP = stack_new(0,0,2,NULL);
 			list_add(PCB->StackPointer, lineSP);
 			STACKPOINTER_T * lineSP2 = stack_new(0,0,3,variableG);
 			list_add(PCB->StackPointer, lineSP2);
@@ -188,7 +188,7 @@ int main(void) {
 			printf("Serializar un stack\n");
 			VARIABLE_T * variableA = variable_new('a',0,0,4);
 			VARIABLE_T * variableG = variable_new('g',0,4,4);
-			STACKPOINTER_T * lineSP = stack_new(0,0,5,variableA);
+			STACKPOINTER_T * lineSP = stack_new(0,0,5,variableG);
 
 			print_LineStack(lineSP);
 
