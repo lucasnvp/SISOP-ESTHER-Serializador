@@ -107,6 +107,7 @@ void connection_handler(uint32_t socket, uint32_t command) {
 		PCB_t* PCB = PCB_new_pointer(0, 0, NULL);
 		deserializar_pcb(socket, PCB);
 		print_PCB(PCB);
+		PCB_free(PCB);
 		break;
 	}
 
@@ -114,6 +115,7 @@ void connection_handler(uint32_t socket, uint32_t command) {
 		printf("Deserializar Variable de stack\n");
 		VARIABLE_T* unaVariable = deserializar_variable_t(socket);
 		print_variable(unaVariable);
+		free(unaVariable);
 		break;
 	}
 
@@ -121,6 +123,7 @@ void connection_handler(uint32_t socket, uint32_t command) {
 		printf("Deserializar una lina de stack\n");
 		STACKPOINTER_T* lineSP = deserializar_stackpointer(socket);
 		print_LineStack(lineSP);
+		free(lineSP);
 		break;
 	}
 

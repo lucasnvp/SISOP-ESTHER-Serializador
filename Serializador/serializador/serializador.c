@@ -254,7 +254,6 @@ void serializar_variable_t(int client, VARIABLE_T* VARIABLE){
 }
 
 t_stream* variable_t_serialize(VARIABLE_T* VARIABLE){
-//	uint32_t datos_size = sizeof(VARIABLE_T);
 	uint32_t datos_size = 	sizeof(VARIABLE->id) + sizeof(VARIABLE->offset) +
 							sizeof(VARIABLE->pagina) + sizeof(VARIABLE->size);
 	t_stream* ENVIAR = stream_create(datos_size);
@@ -262,7 +261,6 @@ t_stream* variable_t_serialize(VARIABLE_T* VARIABLE){
 	uint32_t size_to_send;
 
 	size_to_send = sizeof(VARIABLE->id);
-//	size_to_send = sizeof(uint32_t);
 	memcpy(ENVIAR->data + offset, &(VARIABLE->id),size_to_send);
 	offset += size_to_send;
 
@@ -316,7 +314,6 @@ VARIABLE_T* variable_t_deserialize(char* stream, int* size){
 	uint32_t size_to_recive;
 
 	size_to_recive = sizeof(variable->id);
-//	size_to_recive = sizeof(uint32_t);
 	memcpy(&variable->id, stream + offset, sizeof(variable->id));
 	offset += size_to_recive;
 
@@ -338,13 +335,7 @@ VARIABLE_T* variable_t_deserialize(char* stream, int* size){
 }
 
 t_stream* stackpointer_serialize(STACKPOINTER_T* lineStack){
-	uint32_t datos_size;
-	if(lineStack->VariableDeRetorno != NULL){
-		//Se le resta la variable de retorno ya que tiene otro size que se calcula con la funcion.
-		datos_size = sizeof(STACKPOINTER_T) - sizeof(lineStack->VariableDeRetorno);
-	} else{
-		datos_size = sizeof(STACKPOINTER_T);
-	}
+	uint32_t datos_size = sizeof(STACKPOINTER_T);
 	t_stream* ENVIAR = stream_create(datos_size);
 	uint32_t offset = 0;
 	uint32_t size_to_send;
@@ -364,6 +355,11 @@ t_stream* stackpointer_serialize(STACKPOINTER_T* lineStack){
 	offset += size_to_send;
 
 	if(lineStack->VariableDeRetorno != NULL){
+		uint32_t varDeRetorno = 1;
+		size_to_send = sizeof(varDeRetorno);
+		memcpy(ENVIAR->data + offset, &(lineStack->VariableDeRetorno),size_to_send);
+		offset += size_to_send;
+
 		t_stream* stream_variable = variable_t_serialize(lineStack->VariableDeRetorno);
 		ENVIAR->data = realloc(ENVIAR->data, ENVIAR->size + stream_variable->size);
 		memcpy(ENVIAR->data + offset, stream_variable->data, stream_variable->size);
@@ -382,7 +378,6 @@ t_stream* stackpointer_serialize(STACKPOINTER_T* lineStack){
 
 STACKPOINTER_T* stackpointer_deserialize(char* stream, int* size){
 	STACKPOINTER_T* lineStack = malloc(sizeof(STACKPOINTER_T));
-//	STACKPOINTER_T* lineStack = stack_new(NULL,NULL,NULL,NULL);
 	uint32_t tmp_size = 0;
 	uint32_t offset = 0;
 	uint32_t size_to_recive;
@@ -407,7 +402,7 @@ STACKPOINTER_T* stackpointer_deserialize(char* stream, int* size){
 	memcpy(&lineStack->VariableDeRetorno, stream + offset, size_to_recive);
 	offset += size_to_recive;
 
-	if(lineStack->VariableDeRetorno != 0){
+	if(lineStack->VariableDeRetorno != NULL){
 		lineStack->VariableDeRetorno = variable_t_deserialize(stream + offset, &tmp_size);
 		offset += tmp_size;
 	}
@@ -438,6 +433,11 @@ void serializar_stackpointer(int client, STACKPOINTER_T* lineStack){
 	offset += size_to_send;
 
 	if(lineStack->VariableDeRetorno != NULL){
+		uint32_t varDeRetorno = 1;
+		size_to_send = sizeof(varDeRetorno);
+		memcpy(ENVIAR->data + offset, &(lineStack->VariableDeRetorno),size_to_send);
+		offset += size_to_send;
+
 		t_stream* stream_variable = variable_t_serialize(lineStack->VariableDeRetorno);
 		ENVIAR->data = realloc(ENVIAR->data, ENVIAR->size + stream_variable->size);
 		memcpy(ENVIAR->data + offset, stream_variable->data, stream_variable->size);
@@ -486,7 +486,7 @@ STACKPOINTER_T* deserializar_stackpointer(int servidor){
 	memcpy(&lineStack->VariableDeRetorno, buffer + offset, size_to_recive);
 	offset += size_to_recive;
 
-	if(lineStack->VariableDeRetorno != 0){
+	if(lineStack->VariableDeRetorno != NULL){
 		lineStack->VariableDeRetorno = variable_t_deserialize(buffer + offset, &tmp_size);
 		offset += tmp_size;
 	}

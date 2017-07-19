@@ -188,7 +188,7 @@ int main(void) {
 			printf("Serializar un stack\n");
 			VARIABLE_T * variableA = variable_new('a',0,0,4);
 			VARIABLE_T * variableG = variable_new('g',0,4,4);
-			STACKPOINTER_T * lineSP = stack_new(0,0,5,variableG);
+			STACKPOINTER_T * lineSP = stack_new(NULL,NULL,5,variableG);
 
 			print_LineStack(lineSP);
 
