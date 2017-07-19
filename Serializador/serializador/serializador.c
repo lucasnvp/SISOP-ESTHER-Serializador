@@ -338,9 +338,13 @@ VARIABLE_T* variable_t_deserialize(char* stream, int* size){
 }
 
 t_stream* stackpointer_serialize(STACKPOINTER_T* lineStack){
-	//Se le resta la variable de retorno ya que tiene otro size que se calcula con la funcion.
-//	uint32_t datos_size = sizeof(STACKPOINTER_T) - sizeof(lineStack->VariableDeRetorno);
-	uint32_t datos_size = sizeof(STACKPOINTER_T);
+	uint32_t datos_size;
+	if(lineStack->VariableDeRetorno != NULL){
+		//Se le resta la variable de retorno ya que tiene otro size que se calcula con la funcion.
+		datos_size = sizeof(STACKPOINTER_T) - sizeof(lineStack->VariableDeRetorno);
+	} else{
+		datos_size = sizeof(STACKPOINTER_T);
+	}
 	t_stream* ENVIAR = stream_create(datos_size);
 	uint32_t offset = 0;
 	uint32_t size_to_send;
@@ -359,19 +363,26 @@ t_stream* stackpointer_serialize(STACKPOINTER_T* lineStack){
 	memcpy(ENVIAR->data + offset, &(lineStack->DireccionDeRetorno),size_to_send);
 	offset += size_to_send;
 
-	t_stream* stream_variable = variable_t_serialize(lineStack->VariableDeRetorno);
-	ENVIAR->data = realloc(ENVIAR->data, ENVIAR->size + stream_variable->size);
-	memcpy(ENVIAR->data + offset, stream_variable->data, stream_variable->size);
-	ENVIAR->size += stream_variable->size;
-	offset += stream_variable->size;
-	stream_destroy(stream_variable);
+	if(lineStack->VariableDeRetorno != NULL){
+		t_stream* stream_variable = variable_t_serialize(lineStack->VariableDeRetorno);
+		ENVIAR->data = realloc(ENVIAR->data, ENVIAR->size + stream_variable->size);
+		memcpy(ENVIAR->data + offset, stream_variable->data, stream_variable->size);
+		ENVIAR->size += stream_variable->size;
+		offset += stream_variable->size;
+		stream_destroy(stream_variable);
+	} else{
+		uint32_t varDeRetorno = 0;
+		size_to_send = sizeof(varDeRetorno);
+		memcpy(ENVIAR->data + offset, &(lineStack->VariableDeRetorno),size_to_send);
+		offset += size_to_send;
+	}
 
 	return ENVIAR;
 }
 
 STACKPOINTER_T* stackpointer_deserialize(char* stream, int* size){
-//	STACKPOINTER_T* lineStack = malloc(sizeof(STACKPOINTER_T));
-	STACKPOINTER_T* lineStack = stack_new(NULL,NULL,NULL,NULL);
+	STACKPOINTER_T* lineStack = malloc(sizeof(STACKPOINTER_T));
+//	STACKPOINTER_T* lineStack = stack_new(NULL,NULL,NULL,NULL);
 	uint32_t tmp_size = 0;
 	uint32_t offset = 0;
 	uint32_t size_to_recive;
@@ -392,8 +403,14 @@ STACKPOINTER_T* stackpointer_deserialize(char* stream, int* size){
 	memcpy(&lineStack->DireccionDeRetorno, stream + offset, size_to_recive);
 	offset += size_to_recive;
 
-	lineStack->VariableDeRetorno = variable_t_deserialize(stream + offset, &tmp_size);
-	offset += tmp_size;
+	size_to_recive = sizeof(lineStack->VariableDeRetorno);
+	memcpy(&lineStack->VariableDeRetorno, stream + offset, size_to_recive);
+	offset += size_to_recive;
+
+	if(lineStack->VariableDeRetorno != 0){
+		lineStack->VariableDeRetorno = variable_t_deserialize(stream + offset, &tmp_size);
+		offset += tmp_size;
+	}
 
 	*size = offset;
 
