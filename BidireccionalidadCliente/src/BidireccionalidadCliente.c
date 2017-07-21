@@ -18,7 +18,6 @@
 #include "serializador/serializador.h"
 #include "pcb/pcb.h"
 
-/*
 static const char* PROGRAMA = "begin\n"
 		"variables a, b\n"
 		"a = 3\n"
@@ -26,7 +25,6 @@ static const char* PROGRAMA = "begin\n"
 		"a = b + 12\n"
 		"end\n"
 		"\n";
-*/
 
 /*
 static const char* PROGRAMA = "begin\n"
@@ -54,6 +52,7 @@ static const char* PROGRAMA = "begin\n"
  "\n";
 */
 
+/*
 static const char* PROGRAMA =
 	"#!/usr/bin/ansisop\n"
 
@@ -101,7 +100,7 @@ static const char* PROGRAMA =
 	"	*$0 = 1 + *$0\n"
 	"end\n"
 	"\n";
-
+*/
 
 int main(void) {
 	puts("Bidireccionalidad Cliente"); /* prints Bidireccionalidad Cliente */
