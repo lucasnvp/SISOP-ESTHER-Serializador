@@ -104,7 +104,7 @@ void connection_handler(uint32_t socket, uint32_t command) {
 
 	case 3: {
 		printf("Deserializar PCB\n");
-		PCB_t* PCB = PCB_new_pointer(0, 0, NULL);
+		PCB_t* PCB = PCB_new_pointer(0, 0, NULL, 0);
 		deserializar_pcb(socket, PCB);
 		print_PCB(PCB);
 		PCB_free(PCB);

@@ -152,7 +152,7 @@ int main(void) {
 			t_metadata_program* metadata = metadata_desde_literal(programa);
 
 			//Creo un PCB
-			PCB_t* PCB = PCB_new_pointer(1, 4, metadata);
+			PCB_t* PCB = PCB_new_pointer(1, 4, metadata, 5);
 
 			//Agrego una linea de stack
 			VARIABLE_T * variableA = variable_new('a',0,0,4);
