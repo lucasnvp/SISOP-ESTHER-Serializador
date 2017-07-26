@@ -25,36 +25,27 @@ uint32_t deserializar_int(uint32_t socket){
 	return aux;
 }
 
-void serializar_string(int client, t_SerialString* PATH){
-	void* ENVIAR = malloc( sizeof(t_SerialString) + PATH->sizeString);
+void serializar_string(int client, char* stringToSend){
+	void* ENVIAR = malloc(strlen(stringToSend) + 1);
 	uint32_t offset = 0;
 	uint32_t size_to_send;
 
-	size_to_send = sizeof(PATH->sizeString);
-	memcpy(ENVIAR + offset, &(PATH->sizeString),size_to_send);
+	size_to_send = strlen(stringToSend) + 1;
+	memcpy(ENVIAR + offset, stringToSend, size_to_send);
 	offset += size_to_send;
 
-	size_to_send = PATH->sizeString;
-	memcpy(ENVIAR + offset, PATH->dataString, size_to_send);
-	offset += size_to_send;
-
+	serializar_int(client, offset);
 	send_data(client, ENVIAR, offset);
 	free(ENVIAR);
 }
 
-void deserializar_string(int servidor, t_SerialString* PATH){
-	uint32_t buffer_size;
-	void* buffer = malloc(buffer_size = sizeof(uint32_t));
-
-	//---------------------
-	recive_data(servidor, buffer, sizeof(PATH->sizeString));
-	memcpy(&PATH->sizeString, buffer, buffer_size);
-	PATH->dataString = (char*) malloc(sizeof(char) * PATH->sizeString);
-	recive_data(servidor, PATH->dataString, PATH->sizeString);
-	PATH->dataString[PATH->sizeString] = '\0';
-	//---------------------
-
+char* deserializar_string(int servidor){
+	uint32_t buffer_size = deserializar_int(servidor);
+	void* buffer = malloc(buffer_size);
+	recive_data(servidor, buffer, buffer_size);
+	char* stringToRecived = strdup(buffer);
 	free(buffer);
+	return stringToRecived;
 }
 
 void serializar_pcb(int client, PCB_t* PCB){

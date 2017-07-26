@@ -86,11 +86,8 @@ void connection_handler(uint32_t socket, uint32_t command) {
 
 	case 1: {
 		printf("Deserializar String\n");
-		t_SerialString* PATH = malloc(sizeof(t_SerialString));
-		deserializar_string(socket, PATH);
-		printf("Los bytes del mensaje mensaje son: %d\n", PATH->sizeString);
-		printf("El mensaje es: %s\n", PATH->dataString);
-		free(PATH->dataString);
+		char* PATH = deserializar_string(socket);
+		printf("El mensaje es: %s\n", PATH);
 		free(PATH);
 		break; /* optional */
 	}
