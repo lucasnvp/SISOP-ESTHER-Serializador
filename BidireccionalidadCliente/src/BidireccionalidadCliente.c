@@ -13,7 +13,6 @@
 #include <inttypes.h>
 
 #include <parser/metadata_program.h>
-
 #include "servidor/servidor.h"
 #include "serializador/serializador.h"
 #include "pcb/pcb.h"
@@ -41,7 +40,7 @@ int main(void) {
 
 			//Serializo el path
 			char* stringToSend = strndup(buff, dimen);
-			serializar_string(server, stringToSend);
+			serializar_string(server, PROGRAMA3);
 			free(stringToSend);
 			free(buff);
 			break;

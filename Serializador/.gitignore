@@ -1,1 +1,15 @@
-/Debug/
+/Debug/libSerializador.a
+/Debug/collections/*.d
+/Debug/collections/*.o
+/Debug/commons/*.d
+/Debug/commons/*.o
+/Debug/commons/collections/*.d
+/Debug/commons/collections/*.o
+/Debug/parser/*.d
+/Debug/parser/*.o
+/Debug/pcb/*.d
+/Debug/pcb/*.o
+/Debug/serializador/*.d
+/Debug/serializador/*.o
+/Debug/servidor/*.d
+/Debug/servidor/*.o
