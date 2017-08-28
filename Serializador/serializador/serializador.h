@@ -6,10 +6,10 @@
 #include <inttypes.h>
 #include <string.h>
 
-#include "../commons/collections/queue.h"
-#include "../commons/collections/list.h"
-#include "../servidor/servidor.h"
-#include "../pcb/pcb.h"
+#include "commons/collections/queue.h"
+#include "commons/collections/list.h"
+#include "/home/utnso/ProyectosGitHub/SISOP-ESTHER-Serializador/Serializador/servidor/servidor.h"
+#include "/home/utnso/ProyectosGitHub/SISOP-ESTHER-Serializador/Serializador/pcb/pcb.h"
 
 typedef struct {
 	char* data;
