@@ -3,8 +3,8 @@
 
 #include <inttypes.h>
 
-#include <commons/collections/queue.h>
-#include <parser/metadata_program.h>
+#include "/home/utnso/ProyectosGitHub/SISOP-ESTHER-Serializador/Serializador/commons/collections/queue.h"
+#include "/home/utnso/ProyectosGitHub/SISOP-ESTHER-Serializador/Serializador/parser/metadata_program.h"
 
 typedef struct PCBType{
 	uint32_t PID;
