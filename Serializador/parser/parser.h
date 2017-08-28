@@ -24,10 +24,9 @@
 	#include <string.h>
 	#include <sys/types.h>
 
-	#include <commons/collections/dictionary.h>
-	#include <commons/string.h>
-	#include <commons/string.h>
-	#include <commons/error.h>
+	#include "/home/utnso/ProyectosGitHub/SISOP-ESTHER-Serializador/Serializador/commons/collections/dictionary.h"
+	#include "/home/utnso/ProyectosGitHub/SISOP-ESTHER-Serializador/Serializador/commons/string.h"
+	#include "/home/utnso/ProyectosGitHub/SISOP-ESTHER-Serializador/Serializador/commons/error.h"
 
 	//Descriptores
 	#define DESCRIPTOR_SALIDA 1
