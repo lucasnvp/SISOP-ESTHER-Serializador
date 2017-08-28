@@ -26,7 +26,7 @@ endif
 all: BidireccionalidadServidor
 
 dependents:
-	-cd /home/utnso/ProyectosGitHub/SISOP-ESTHER-Serializador/Serializador/Debug && $(MAKE) all
+	-cd /home/utnso/ProyectosGitHub/SISOP-ESTHER-Serializador/Serializador/Debug && $(MAKE) clean all
 
 # Tool invocations
 BidireccionalidadServidor: $(OBJS) $(USER_OBJS) /home/utnso/ProyectosGitHub/SISOP-ESTHER-Serializador/Serializador/Debug/libSerializador.a
